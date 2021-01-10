@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-demo-api-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet-demo-api
+  template:
+    metadata:
+      labels:
+        app: dotnet-demo-api
+    spec:
+      containers:
+        - name: dotnet-demo-api
+          image: denizgirginer8/dotnet-demo-api
+          imagePullPolicy: Never   
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://dotnet-demo-mongo-service:27017/dotnetdemo'
+            - name: MONGO_DB
+              value: 'dotnet-demo'       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnet-demo-api-service
+spec:
+  selector:
+    app: dotnet-demo-api
+  ports:
+    - name: dotnet-demo-api
+      protocol: TCP
+      port: 3000 # service port
+      targetPort: 5000 # port expose in container
