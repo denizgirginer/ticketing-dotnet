@@ -13,6 +13,8 @@ build
 .keys
 obj/
 bin/
+dotnet-demo-api/
+.scripts/
 
 # User-specific files
 *.rsuser
