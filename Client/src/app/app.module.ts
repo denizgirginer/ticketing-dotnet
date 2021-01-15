@@ -5,6 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+//import { MatToolbarModule } from '@angular/material/toolbar';
+import { MaterialModule } from './material.module';
+import { AuthModule } from './auth/auth.module';
+import { TicketsModule } from './tickets/tickets.module';
+import { MyordersModule } from './myorders/myorders.module';
+import { SellTicketModule } from './sell-ticket/sell-ticket.module';
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -12,7 +20,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    //MatToolbarModule
+    MaterialModule,
+    AuthModule,
+    TicketsModule,
+    MyordersModule,
+    SellTicketModule
   ],
   providers: [],
   bootstrap: [AppComponent]

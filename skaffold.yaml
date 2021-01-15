@@ -57,9 +57,5 @@ build:
         dockerfile: dockerfile
       sync:
         manual:
-          - src: '**/*.ts'
-            dest: .
-          - src: '**/*.css'
-            dest: .
-          - src: '**/*.html'
+          - src: 'src/**'
             dest: .

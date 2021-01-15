@@ -1,0 +1,7 @@
+.menu-spacer {
+    flex: 1 1 auto;
+  }
+
+  .menu-list > a {
+      min-width: 250px;
+  }
