@@ -2,6 +2,7 @@ using JwtGenerator.ServiceCollection.Extensions.JwtBearer;
 using JwtGenerator.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.Helpers;
 using Ticket.Common.MongoDb.V1;
 
 namespace OrdersApi
@@ -29,13 +31,9 @@ namespace OrdersApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var tokenOptions = new TokenOptions(
-                Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
-                Environment.GetEnvironmentVariable("JWT_ISSUER"),
-                Environment.GetEnvironmentVariable("JWT_KEY"), 30);
+            services.AddJwtForAPI(); 
+            services.AddHttpContextAccessor();
 
-            services.AddJwtAuthenticationForAPI(tokenOptions);
-            //services.AddJwtAuthenticationWithProtectedCookie(tokenOptions, "Ticketing");
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequiresAdmin", policy => policy.RequireClaim("HasAdminRights"));
@@ -43,22 +41,26 @@ namespace OrdersApi
 
             services.AddMongoDbSettings(Configuration);
             services.AddScoped<ITicketRepo, TicketRepo>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
 
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpContext(httpContextAccessor);
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrdersApi.Models.Request;
 using OrdersApi.Repo;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.Helpers;
 
 namespace OrdersApi.Controllers
 {
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         ITicketRepo _ticketRepo;
@@ -22,7 +25,7 @@ namespace OrdersApi.Controllers
         [Route("/")]
         public async Task<IActionResult> GetOrders()
         {
-            var userId = GetUserId();
+            var userId = SessionHelper.GetUserId();
 
             var orders = await _orderRepo.GetUserOrders(userId);
 
@@ -40,7 +43,7 @@ namespace OrdersApi.Controllers
                 throw new Exception("Not Found");
             }
 
-            if(order.userId!=GetUserId())
+            if(order.userId!=SessionHelper.GetUserId())
             {
                 throw new Exception("Not Authoriez");
             }
@@ -51,7 +54,7 @@ namespace OrdersApi.Controllers
         }
 
         [HttpDelete]
-        [Route("/{orderId}")] 
+        [Route("/{orderId}")]
         public async Task<IActionResult> DeleteOrder(string orderId)
         {
             var order = await _orderRepo.GetByIdAsync(orderId);
@@ -61,7 +64,7 @@ namespace OrdersApi.Controllers
                 throw new Exception("Not Found");
             }
 
-            if (order.userId != GetUserId())
+            if (order.userId != SessionHelper.GetUserId())
             {
                 throw new Exception("Not Authoriez");
             }
@@ -96,7 +99,7 @@ namespace OrdersApi.Controllers
                 ticket=found,
                 ticketId = ticket.ticketId,
                 expiresAt = expirationDate,
-                userId = GetUserId()
+                userId = SessionHelper.GetUserId()
             };
 
             await _orderRepo.AddAsync(newOrder);
@@ -106,11 +109,5 @@ namespace OrdersApi.Controllers
             return Ok(newOrder);
         }
 
-        private string GetUserId()
-        {
-            var claim = HttpContext.User.Claims.SingleOrDefault(x => x.Type == "userId");
-
-            return claim?.Value;
-        }
     }
 }

@@ -36,6 +36,18 @@ namespace TicketsApi.Controllers
             return Ok(ticket);
         }
 
+        [HttpDelete]
+        [Authorize("RequiresAdmin")]
+        [Route("/{ticketId}")]
+        public async Task<IActionResult> DeleteTicket(string ticketId)
+        {
+            var ticket = await _repo.GetByIdAsync(ticketId);
+
+            await _repo.DeleteAsync(ticket);
+
+            return  await Task.FromResult(Ok(new { success=true }));
+        }
+
         [HttpPost]
         [Authorize]
         [Route("/")]

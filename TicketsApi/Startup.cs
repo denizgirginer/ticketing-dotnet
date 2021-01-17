@@ -31,6 +31,7 @@ namespace TicketsApi
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequiresAdmin", policy => policy.RequireClaim("HasAdminRights"));
+
             });
 
             services.AddControllers();

@@ -22,6 +22,18 @@ export class ApiService {
         return null;
     }
 
+    put<T>(url:string, data?:any, opts?:any) {
+        let headers = this.getHeaders();
+
+        return this.http.put<T>(this.baseUrl+url, data, {headers:headers});
+    }
+
+    putAsync<T>(url:string, data?:any, opts?:any) {
+        let headers = this.getHeaders();
+
+        return this.http.put<T>(this.baseUrl+url, data, {headers:headers}).toPromise();
+    }
+
     post<T>(url:string, data?:any, opts?:any) {
         let headers = this.getHeaders();
 
@@ -44,5 +56,17 @@ export class ApiService {
         let headers = this.getHeaders();
 
         return this.http.get<T>(this.baseUrl+url, {headers:headers}).toPromise();
+    }
+
+    delete<T>(url:string, opts?:any) {
+        let headers = this.getHeaders();
+
+        return this.http.delete<T>(this.baseUrl+url, {headers:headers});
+    }
+
+    deleteAsync<T>(url:string, opts?:any) {
+        let headers = this.getHeaders();
+
+        return this.http.delete<T>(this.baseUrl+url, {headers:headers}).toPromise();
     }
 }

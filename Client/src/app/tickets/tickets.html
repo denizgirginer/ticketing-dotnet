@@ -1,4 +1,10 @@
 <div class="page-content">
+    
+    <mat-card>
+        <mat-card-content>
+            {{tickets.length}} total ticket.
+        </mat-card-content>
+    </mat-card>
     <mat-card *ngFor="let ticket of tickets">
         <mat-card-header>
             <div mat-card-avatar class="header-image"></div>
@@ -11,8 +17,8 @@
         </mat-card-content>
         <mat-card-actions>
             <button mat-button>Like</button>
-            <button mat-button>Buy</button>
-            <button mat-button color="warn" *ngIf="isLogin">Delete</button>
+            <button mat-button (click)="PurchaseTicket(ticket)">Purchase</button>
+            <button mat-button color="warn" (click)="DeleteTicket(ticket)" *ngIf="isLogin">Delete</button>
         </mat-card-actions>
     </mat-card>
 
