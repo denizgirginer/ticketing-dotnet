@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { MaterialModule } from '../material.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { SigninComponent } from './signin';
 import { SignupComponent } from './signup';
@@ -28,6 +30,8 @@ const routes: Routes = [
         SignoutComponent
     ],
     imports: [
+        BrowserModule,
+        ReactiveFormsModule,
         MaterialModule,
         [RouterModule.forRoot(routes)]
     ],

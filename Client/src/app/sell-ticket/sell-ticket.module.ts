@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+
 import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { MaterialModule } from '../material.module';
 
@@ -16,6 +19,8 @@ const routes: Routes = [
         SellTicketComponent
     ],
     imports: [
+        BrowserModule,
+        ReactiveFormsModule,
         MaterialModule,
         [RouterModule.forRoot(routes)]
     ],

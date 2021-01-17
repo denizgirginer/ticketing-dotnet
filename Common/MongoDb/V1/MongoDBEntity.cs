@@ -17,7 +17,7 @@ namespace Ticket.Common.MongoDb.V1
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("__v", Order = 1)]
-        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonRepresentation(BsonType.Int32)]
         public int Version { get; set; }
     }
 }

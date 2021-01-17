@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.Helpers;
 using TicketsApi.Repo;
 
 namespace TicketsApi.Controllers
@@ -35,7 +37,7 @@ namespace TicketsApi.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         [Route("/")]
         public async Task<Models.TicketBase> NewTicket(Models.TicketBase ticket)
         {
@@ -43,7 +45,7 @@ namespace TicketsApi.Controllers
             {
                 title=ticket.title, 
                 price=ticket.price,
-                userId=GetUserID()
+                userId=SessionHelper.GetUserId()
             };
             await _repo.AddAsync(newTicket);
 
@@ -55,7 +57,7 @@ namespace TicketsApi.Controllers
 
 
         [HttpPut]
-        //[Authorize]
+        [Authorize]
         [Route("/")]
         public async Task<IActionResult> UpdateTicket(Models.TicketBase ticket)
         {
@@ -77,13 +79,5 @@ namespace TicketsApi.Controllers
         }
 
 
-
-
-        private string GetUserID()
-        {
-            var claim = HttpContext.User.Claims.SingleOrDefault(x => x.Type == "userId");
-
-            return claim?.Value;
-        }
     }
 }

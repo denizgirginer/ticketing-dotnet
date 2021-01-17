@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Ticket.Common.Helpers;
 using Ticket.Common.Utility;
 
 namespace AuthApi.Controllers
@@ -54,9 +55,9 @@ namespace AuthApi.Controllers
 
         [HttpPost]
         [Route("/signout")]
-        public async Task<IActionResult> Signout()
+        public IActionResult Signout()
         {
-            await HttpContext.SignOutAsync();
+            
             return Ok(new { success = true });
         }
 
@@ -65,8 +66,8 @@ namespace AuthApi.Controllers
         [Authorize]
         public IActionResult CurrentUser()
         {
-            var claim = HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Email);
-            return Ok(new { success = true, email = claim?.Value });
+            
+            return Ok(new { success = true, email = SessionHelper.GetUserEmail(), id=SessionHelper.GetUserId() });
         }
 
     }

@@ -1,9 +1,9 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="mat-elevation-z6" style="position:fixed;z-index: 999;top:0px">
   <mat-toolbar-row>
     <button mat-icon-button>
       <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
     </button>
-    <h1>Simple Microservice</h1>
+    <h1>Ticketing.com</h1>
     <div>
       <a mat-button [routerLink]="'/tickets'"> Tickets </a>
       <a mat-button [routerLink]="'/sell-ticket'" *ngIf="isLogin"> Sell Ticket </a>
@@ -24,7 +24,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<mat-sidenav-container>
+<mat-sidenav-container style="flex:1">
   <mat-sidenav #sidenav>
     <mat-nav-list class="menu-list">
       <a mat-list-item [routerLink]="'/tickets'"> Tickets </a>
@@ -39,7 +39,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div style="height: 88vh;">
+    <div style="height: 100%;">
 
       <router-outlet></router-outlet>
     </div>

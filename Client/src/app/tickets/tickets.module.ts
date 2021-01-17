@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+
 import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { MaterialModule } from '../material.module';
 
@@ -11,7 +14,8 @@ const routes: Routes = [
     // },
     {
         component: TicketsComponent,
-        path: ''
+        path: '',
+        pathMatch: 'full'
     },
     {
         component: TicketsComponent,
@@ -24,6 +28,8 @@ const routes: Routes = [
         TicketsComponent
     ],
     imports: [
+        BrowserModule,
+        ReactiveFormsModule,
         MaterialModule,
         [RouterModule.forRoot(routes)]
     ],

@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import { AuthService } from '@services/auth.service';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,9 +11,28 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Client';
 
-  isLogin:boolean=true;
+  isLogin:boolean=false;
 
-  constructor(){
+  signInSubs:Subscription;
+  signOutSubs:Subscription;
+  constructor(private authService:AuthService){
 
+  }
+
+  
+  ngOnInit(){
+    this.isLogin = this.authService.isLogin();
+    
+    this.signInSubs = this.authService.$onSignin.subscribe(res=>{
+      this.isLogin = res.success;
+    })
+
+    this.signOutSubs = this.authService.$onSignout.subscribe(res=>{
+      this.isLogin = !res.success;
+    })
+  }
+
+  ngOnDestroy(){
+    this.signInSubs.unsubscribe();
   }
 }

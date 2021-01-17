@@ -40,7 +40,7 @@ namespace AuthApi.Repo
 
             TokenWithClaimsPrincipal accessTokenResult = _jwtTokenGenerator.GenerateAccessTokenWithClaimsPrincipal(
                     found.email,
-                    AddMyClaims(user));
+                    AddMyClaims(found));
 
             return accessTokenResult;
         }
@@ -52,7 +52,8 @@ namespace AuthApi.Repo
                 new Claim(ClaimTypes.GivenName, authenticatedUser.email),
                 new Claim(ClaimTypes.Surname, authenticatedUser.email),
                 new Claim(ClaimTypes.Email, authenticatedUser.email),
-                new Claim("HasAdminRights", "bla")
+                new Claim("userId", authenticatedUser.Id),
+                new Claim("HasAdminRights", "true")
             };
 
             return myClaims;
