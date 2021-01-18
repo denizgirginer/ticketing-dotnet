@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Ticket.Common.EventBus;
 using Ticket.Common.Helpers;
 using Ticket.Common.MongoDb.V1;
 using TicketsApi.Repo;
@@ -27,12 +28,15 @@ namespace TicketsApi
         {
             services.AddJwtForAPI();
             services.AddHttpContextAccessor();
+            services.AddNats(); 
+
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequiresAdmin", policy => policy.RequireClaim("HasAdminRights"));
 
             });
+
 
             services.AddControllers();
 
@@ -47,6 +51,7 @@ namespace TicketsApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
 
             app.UseHttpContext(httpContextAccessor);
 

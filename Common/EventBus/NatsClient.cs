@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using STAN.Client;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Ticket.Common.EventBus
     public static class NatsClient
     {
         private static IStanConnection _client;
-        public static void UseNats(IConfiguration configuration)
+        public static void AddNats(this IServiceCollection services)
         {
             var cf = new StanConnectionFactory();
             var options = StanOptions.GetDefaultOptions();
@@ -40,7 +41,7 @@ namespace Ticket.Common.EventBus
             byte[] message = Encoding.UTF8.GetBytes(body);
 
             string subject = _event.Subject.ToString();
-
+            
             return await _client.PublishAsync(subject,  message);
         }
 

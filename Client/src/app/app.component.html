@@ -8,6 +8,7 @@
       <a mat-button [routerLink]="'/tickets'"> Tickets </a>
       <a mat-button [routerLink]="'/sell-ticket'" *ngIf="isLogin"> Sell Ticket </a>
       <a mat-button [routerLink]="'/myorders'" *ngIf="isLogin"> My Orders </a>
+      <a mat-button [routerLink]="'/users'" *ngIf="hasRole('HasAdminRights')"> Users </a>
       
     </div>
 
@@ -30,6 +31,7 @@
       <a mat-list-item [routerLink]="'/tickets'"> Tickets </a>
       <a mat-list-item [routerLink]="'/sell-ticket'" *ngIf="isLogin"> Sell Ticket </a>
       <a mat-list-item [routerLink]="'/myorders'" *ngIf="isLogin"> My Orders </a>
+      <a mat-list-item [routerLink]="'/users'" *ngIf="hasRole('HasAdminRights')"> Users </a>
       <hr>
       <a mat-list-item [routerLink]="'/auth/signup'" *ngIf="!isLogin"> Sign Up </a>
       <a mat-list-item [routerLink]="'/auth/signin'" *ngIf="!isLogin"> Sign In </a>

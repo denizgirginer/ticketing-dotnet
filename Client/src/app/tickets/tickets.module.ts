@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { MaterialModule } from '../material.module';
 
 import { TicketsComponent } from './tickets';
+import { TicketView } from './ticket-view';
 
 const routes: Routes = [
     // {
@@ -20,12 +21,17 @@ const routes: Routes = [
     {
         component: TicketsComponent,
         path: 'tickets'
+    },
+    {
+        component: TicketView,
+        path: 'tickets/:id'
     }
 ];
 
 @NgModule({
     declarations:[
-        TicketsComponent
+        TicketsComponent,
+        TicketView
     ],
     imports: [
         BrowserModule,

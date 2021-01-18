@@ -6,7 +6,15 @@ namespace Ticket.Common.Events
 {
     public enum Subjects
     {
+        TicketCreated,
+        TicketUpdated,
+
         OrderCreated,
-        OrderUpdated
+        OrderCancelled,
+        OrderUpdated,
+
+        ExpirationComplete,
+
+        PaymentCreated
     }
 }

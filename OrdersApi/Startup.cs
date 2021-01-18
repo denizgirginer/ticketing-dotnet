@@ -1,19 +1,12 @@
-using JwtGenerator.ServiceCollection.Extensions.JwtBearer;
-using JwtGenerator.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using OrdersApi.Events;
 using OrdersApi.Repo;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Ticket.Common.EventBus;
 using Ticket.Common.Helpers;
 using Ticket.Common.MongoDb.V1;
 
@@ -25,7 +18,6 @@ namespace OrdersApi
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -33,6 +25,10 @@ namespace OrdersApi
         {
             services.AddJwtForAPI(); 
             services.AddHttpContextAccessor();
+            services.AddNats();
+
+            services.AddSingleton<ITicketCreatedListener, TicketCreatedListener>();
+            services.AddSingleton<ITicketUpdatedListener, TicketUpdatedListener>();
 
             services.AddAuthorization(options =>
             {
@@ -40,19 +36,25 @@ namespace OrdersApi
             });
 
             services.AddMongoDbSettings(Configuration);
-            services.AddScoped<ITicketRepo, TicketRepo>();
-            services.AddScoped<IOrderRepo, OrderRepo>();
+            services.AddSingleton<ITicketRepo, TicketRepo>();
+            services.AddSingleton<IOrderRepo, OrderRepo>();
 
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, 
+            ITicketCreatedListener ticketCreatedListener,
+            ITicketUpdatedListener ticketUpdatedListener)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            ticketCreatedListener.Subscribe();
+            ticketUpdatedListener.Subscribe();
+
 
             app.UseHttpContext(httpContextAccessor);
 

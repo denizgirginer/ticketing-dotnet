@@ -8,7 +8,7 @@
     <mat-card *ngFor="let ticket of tickets">
         <mat-card-header>
             <div mat-card-avatar class="header-image"></div>
-            <mat-card-title>{{ticket.title}}</mat-card-title>
+            <mat-card-title><a [routerLink]="'/tickets/'+ticket.id">{{ticket.title}}</a></mat-card-title>
             <mat-card-subtitle>Awesome Ticket!</mat-card-subtitle>
         </mat-card-header>
         <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">

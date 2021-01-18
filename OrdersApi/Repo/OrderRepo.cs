@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.Events;
 using Ticket.Common.MongoDb.V1;
 
 namespace OrdersApi.Repo
@@ -21,9 +22,9 @@ namespace OrdersApi.Repo
         public async Task<bool> IsReserved(string ticketId)
         {
             var found = await this.GetAsync(x => x.ticketId == ticketId && (
-                x.status==Models.OrderStatus.Created || 
-                x.status==Models.OrderStatus.AwaitingPayment ||
-                x.status==Models.OrderStatus.Complete
+                x.status==OrderStatus.Created || 
+                x.status==OrderStatus.AwaitingPayment ||
+                x.status==OrderStatus.Complete
             ));
             return found!=null;
         }
@@ -34,13 +35,13 @@ namespace OrdersApi.Repo
 
             await Task.Run(() =>
             {
-                orders = Get(x => x.userId == userId).ToList();
-
-                orders.ForEach(async order =>
-                {
-                    order.ticket = await _ticketRepo.GetByIdAsync(order.ticketId);
-                });
+                orders = Get(x => x.userId == userId).ToList(); 
             });
+
+            foreach(var order in orders)
+            {
+                order.ticket = await _ticketRepo.GetByIdAsync(order.ticketId);
+            }
 
             return await Task.FromResult(orders);
         }

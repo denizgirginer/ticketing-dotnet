@@ -1,3 +1,18 @@
 <div class="page-content">
 <h3>MyOrders</h3>
+
+<table>
+    <thead>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Status</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let order of orders">
+            <td>{{order.ticket?.title}}</td>
+            <td>{{order.ticket?.price}}</td>
+            <td>{{order.status}}</td>
+        </tr>
+    </tbody>
+</table>
 </div>

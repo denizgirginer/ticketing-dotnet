@@ -40,7 +40,7 @@ namespace Ticket.Common.MongoDb.V1
 
         public virtual Task<T> GetByIdAsync(string id)
         {
-            return Collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            return Collection.Find(x => x.id == id).FirstOrDefaultAsync();
         }
 
         public virtual async Task<T> AddAsync(T entity)
@@ -58,7 +58,7 @@ namespace Ticket.Common.MongoDb.V1
 
         public virtual async Task<T> UpdateAsync(string id, T entity)
         {
-            return await Collection.FindOneAndReplaceAsync(x => x.Id == id, entity);
+            return await Collection.FindOneAndReplaceAsync(x => x.id == id, entity);
         }
 
         public virtual async Task<T> UpdateAsync(T entity, Expression<Func<T, bool>> predicate)
@@ -68,12 +68,12 @@ namespace Ticket.Common.MongoDb.V1
 
         public virtual async Task<T> DeleteAsync(T entity)
         {
-            return await Collection.FindOneAndDeleteAsync(x => x.Id == entity.Id);
+            return await Collection.FindOneAndDeleteAsync(x => x.id == entity.id);
         }
 
         public virtual async Task<T> DeleteAsync(string id)
         {
-            return await Collection.FindOneAndDeleteAsync(x => x.Id == id);
+            return await Collection.FindOneAndDeleteAsync(x => x.id == id);
         }
 
         public virtual async Task<T> DeleteAsync(Expression<Func<T, bool>> filter)

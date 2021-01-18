@@ -9,15 +9,15 @@ namespace Ticket.Common.MongoDb.V1
         [BsonId()]
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonElement(Order = 0)]
-        public string Id {get; set;}
+        public string id {get; set;}
 
         [BsonRepresentation(BsonType.DateTime)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         [BsonElement(Order = 101)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime createdAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("__v", Order = 1)]
         [BsonRepresentation(BsonType.Int32)]
-        public int Version { get; set; }
+        public int version { get; set; }
     }
 }

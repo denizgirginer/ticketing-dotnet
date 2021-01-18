@@ -19,6 +19,9 @@ export class AppComponent {
 
   }
 
+  hasRole(role:string){
+    return this.authService.hasRole(role);
+  }
   
   ngOnInit(){
     this.isLogin = this.authService.isLogin();

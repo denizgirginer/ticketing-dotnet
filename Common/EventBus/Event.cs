@@ -8,6 +8,7 @@ namespace Ticket.Common.EventBus
     {
         public static async Task Publish<T>(this Event<T> _event)
         {
+            
             await NatsClient.Publish<T> (_event);
         }
     }
@@ -17,33 +18,12 @@ namespace Ticket.Common.EventBus
 
     }
 
-    public class Event<T> :EventBase
+    abstract public class Event<T> :EventBase
     {
-        public Subjects Subject { get; set; }
-        public T Data { get; set; }
+        abstract public Subjects Subject { get; }
+        abstract public T Data { get;  }
     }
 
-    public class TestEvent: Event<TestData>
-    {
-        
-    }
-
-    public class TestData
-    {
-        public string message { get; set; }
-    }
-
-    public class TestPublisher
-    {
-        public async void TestEvent()
-        {
-            await new TestEvent() { 
-                Data = new TestData()
-                {
-
-                }
-            }.Publish();
-        }
-    }
+   
 
 }

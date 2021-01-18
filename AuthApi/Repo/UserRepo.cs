@@ -50,10 +50,11 @@ namespace AuthApi.Repo
         {
             var myClaims = new List<Claim>
             {
+                new Claim("TestRole", ClaimTypes.Role),
                 new Claim(ClaimTypes.GivenName, authenticatedUser.email),
                 new Claim(ClaimTypes.Surname, authenticatedUser.email),
                 new Claim(ClaimTypes.Email, authenticatedUser.email),
-                new Claim("userId", authenticatedUser.Id)
+                new Claim("userId", authenticatedUser.id)
             };
 
             if (authenticatedUser.email == "admin@ticketing.com")

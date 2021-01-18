@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.Helpers;
 
 namespace PaymentsApi.Controllers
 {
@@ -30,7 +31,7 @@ namespace PaymentsApi.Controllers
                 throw new Exception("Not Found");
             }
 
-            if(found.userId!=GetUserId())
+            if(found.userId!=SessionHelper.GetUserId())
             {
                 throw new Exception("Not Authorized");
             }
@@ -47,22 +48,15 @@ namespace PaymentsApi.Controllers
 
             var newPayment = new Models.Payment() { 
                 stripeId=stripeId,
-                orderId=found.Id
+                orderId=found.id
             };
             await _paymentRepo.AddAsync(newPayment);
 
             //TODO publish event PaymentCreated
 
             return Ok(new {
-                id= newPayment.Id
+                id= newPayment.id
             });
-        }
-
-        private string GetUserId()
-        {
-            var claim = HttpContext.User.Claims.SingleOrDefault(x => x.Type == "userId");
-
-            return claim?.Value;
         }
     }
 }

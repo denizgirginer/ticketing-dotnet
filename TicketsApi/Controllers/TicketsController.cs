@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.EventBus;
+using Ticket.Common.Events;
 using Ticket.Common.Helpers;
 using TicketsApi.Repo;
 
@@ -61,19 +63,26 @@ namespace TicketsApi.Controllers
             };
             await _repo.AddAsync(newTicket);
 
-            //TODO publish ticket
+            //publish ticket
             Console.WriteLine("Ticket added");
+            var evt = new TicketCreatedEvent();
+            evt.Data.id = newTicket.id;
+            evt.Data.title = newTicket.title;
+            evt.Data.price = newTicket.price;
+            evt.Data.userId = newTicket.userId;
+            evt.Data.version = newTicket.version;
+            await evt.Publish();
 
-            return await _repo.GetTicketById(newTicket.Id); 
+            return await _repo.GetTicketById(newTicket.id); 
         }
 
 
         [HttpPut]
         [Authorize]
-        [Route("/")]
+        [Route("/{ticketId}")]
         public async Task<IActionResult> UpdateTicket(Models.TicketBase ticket)
         {
-            var _ticket = await _repo.GetByIdAsync(ticket.Id);
+            var _ticket = await _repo.GetByIdAsync(ticket.id);
 
             if(_ticket==null)
             {
@@ -82,10 +91,20 @@ namespace TicketsApi.Controllers
 
             _ticket.title = ticket.title;
             _ticket.price = ticket.price;
+            _ticket.version = _ticket.version + 1;
             
-            await _repo.UpdateAsync(_ticket.Id, _ticket);
+            await _repo.UpdateAsync(_ticket.id, _ticket);
 
-            //TODO publish ticket
+            Console.WriteLine("Update Ticket Version:" + _ticket.version);
+
+            //publish ticket
+            var evt = new TicketUpdatedEvent();
+            evt.Data.id = _ticket.id;
+            evt.Data.title = _ticket.title;
+            evt.Data.price = _ticket.price;
+            evt.Data.userId = _ticket.userId;
+            evt.Data.version = _ticket.version;
+            await evt.Publish();
 
             return Ok(_ticket as Models.TicketBase);
         }

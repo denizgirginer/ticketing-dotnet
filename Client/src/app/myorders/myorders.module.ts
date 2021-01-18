@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
 import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { MaterialModule } from '../material.module';
 
@@ -20,6 +22,7 @@ const routes: Routes = [
         MyordersComponent
     ],
     imports: [
+        BrowserModule,
         MaterialModule,
         [RouterModule.forRoot(routes)]
     ],

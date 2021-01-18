@@ -8,14 +8,16 @@ import { ApiService } from '@services/api.service';
 }) 
 export class MyordersComponent { 
     
+    orders:any[]=[];
+
     constructor(private api:ApiService) {
 
     }
 
     ngOnInit(){
 
-        this.api.get("/orders").subscribe(res=>{
-            console.log(res);
+        this.api.get<any[]>("/orders").subscribe(res=>{
+            this.orders = res;
         })
     }
 }

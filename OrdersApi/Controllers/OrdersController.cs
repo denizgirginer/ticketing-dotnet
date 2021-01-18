@@ -5,6 +5,8 @@ using OrdersApi.Repo;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.EventBus;
+using Ticket.Common.Events;
 using Ticket.Common.Helpers;
 
 namespace OrdersApi.Controllers
@@ -38,12 +40,12 @@ namespace OrdersApi.Controllers
         {
             var order = await _orderRepo.GetByIdAsync(orderId);
 
-            if(order==null)
+            if (order == null)
             {
                 throw new Exception("Not Found");
             }
 
-            if(order.userId!=SessionHelper.GetUserId())
+            if (order.userId != SessionHelper.GetUserId())
             {
                 throw new Exception("Not Authoriez");
             }
@@ -66,12 +68,16 @@ namespace OrdersApi.Controllers
 
             if (order.userId != SessionHelper.GetUserId())
             {
-                throw new Exception("Not Authoriez");
+                throw new Exception("Not Authoried");
             }
 
             await _orderRepo.DeleteAsync(order);
 
-            //TODO publish event OrderCancelled
+            //publish OrderCancelled
+            var evt = new OrderCancelledEvent();
+            evt.Data.id = order.id;
+            evt.Data.ticket.id = order.ticket.id;
+            await evt.Publish();
 
             return Ok(true);
         }
@@ -82,21 +88,22 @@ namespace OrdersApi.Controllers
         {
             var found = await _ticketRepo.GetByIdAsync(ticket.ticketId);
 
-            if(found==null)
+            if (found == null)
             {
                 throw new Exception("Not Found Ticket");
             }
 
-            if(await _orderRepo.IsReserved(ticket.ticketId))
+            if (await _orderRepo.IsReserved(ticket.ticketId))
             {
                 throw new Exception("Ticket already reserved");
             }
 
             var expirationDate = DateTime.Now.AddMinutes(30);
 
-            var newOrder = new Models.Order() { 
-                status=Models.OrderStatus.Created,
-                ticket=found,
+            var newOrder = new Models.Order()
+            {
+                status = OrderStatus.Created,
+                ticket = found,
                 ticketId = ticket.ticketId,
                 expiresAt = expirationDate,
                 userId = SessionHelper.GetUserId()
@@ -104,7 +111,16 @@ namespace OrdersApi.Controllers
 
             await _orderRepo.AddAsync(newOrder);
 
-            //TODO publish event OrderCreated
+            //publish event OrderCreated
+            var evt = new OrderCreatedEvent();
+            evt.Data.expiresAt = newOrder.expiresAt;
+            evt.Data.id = newOrder.id;
+            evt.Data.status = newOrder.status;
+            evt.Data.userId = newOrder.userId;
+            evt.Data.version = newOrder.version;
+            evt.Data.ticket.id = newOrder.ticket.id;
+            evt.Data.ticket.price = newOrder.ticket.price;
+            await evt.Publish();
 
             return Ok(newOrder);
         }

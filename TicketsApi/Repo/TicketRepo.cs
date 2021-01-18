@@ -35,7 +35,7 @@ namespace TicketsApi.Repo
 
             await Task.Run(() =>
             {
-                ticket = Get(x => x.Id == id).Select(x => x as Models.TicketBase).FirstOrDefault();
+                ticket = Get(x => x.id == id).Select(x => x as Models.TicketBase).FirstOrDefault();
             });
 
             return await Task.FromResult(ticket);
