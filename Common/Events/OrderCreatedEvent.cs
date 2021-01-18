@@ -9,7 +9,7 @@ namespace Ticket.Common.Events
     {
         public override Subjects Subject => Subjects.OrderCreated;
 
-        public override OrderCreatedData Data => new OrderCreatedData();
+        public override OrderCreatedData Data { get; set; } = new OrderCreatedData();
     }
 
     public class OrderCreatedData
@@ -19,7 +19,7 @@ namespace Ticket.Common.Events
         public string userId { get; set; }
         public DateTime expiresAt { get; set; }
         public int version { get; set; }
-        public TicketData ticket => new TicketData();
+        public TicketData ticket { get; set; } = new TicketData();
     }
 
     public class TicketData

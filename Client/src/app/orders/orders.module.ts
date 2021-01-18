@@ -28,6 +28,6 @@ const routes: Routes = [
     ],
     exports: []
 })
-export class MyordersModule {
+export class OrdersModule {
 
 }

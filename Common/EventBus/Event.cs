@@ -21,7 +21,7 @@ namespace Ticket.Common.EventBus
     abstract public class Event<T> :EventBase
     {
         abstract public Subjects Subject { get; }
-        abstract public T Data { get;  }
+        abstract public T Data { get; set; }
     }
 
    

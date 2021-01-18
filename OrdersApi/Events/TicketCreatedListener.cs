@@ -24,7 +24,7 @@ namespace OrdersApi.Events
 
         public override async void OnMessage(TicketCreatedData _data, StanMsg msg)
         {
-            Console.WriteLine("Ticket created:" + _data.id);
+            Console.WriteLine($"Ticket created:{_data.id} v:{_data.version}" );
 
             var ticket = new Models.Ticket();
             ticket.id = _data.id;

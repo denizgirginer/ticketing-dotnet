@@ -8,7 +8,7 @@ namespace Ticket.Common.Events
     public class TicketCreatedEvent : Event<TicketCreatedData>
     {
         public override Subjects Subject => Subjects.TicketCreated;
-        public override TicketCreatedData Data => new TicketCreatedData();
+        public override TicketCreatedData Data { get; set; } = new TicketCreatedData();
 
     }
 

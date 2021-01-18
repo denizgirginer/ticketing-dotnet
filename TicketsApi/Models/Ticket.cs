@@ -12,6 +12,7 @@ namespace TicketsApi.Models
 
     }
 
+    [BsonIgnoreExtraElements]
     public class Ticket : TicketBase
     {
         [BsonRepresentation(BsonType.ObjectId)]

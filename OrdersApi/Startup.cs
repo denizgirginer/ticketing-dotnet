@@ -8,6 +8,7 @@ using OrdersApi.Events;
 using OrdersApi.Repo;
 using Ticket.Common.EventBus;
 using Ticket.Common.Helpers;
+using Ticket.Common.Middleware;
 using Ticket.Common.MongoDb.V1;
 
 namespace OrdersApi
@@ -52,9 +53,10 @@ namespace OrdersApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseErrorMiddleware();
+
             ticketCreatedListener.Subscribe();
             ticketUpdatedListener.Subscribe();
-
 
             app.UseHttpContext(httpContextAccessor);
 
@@ -69,6 +71,8 @@ namespace OrdersApi
             {
                 endpoints.MapControllers();
             });
+
+            
         }
     }
 }

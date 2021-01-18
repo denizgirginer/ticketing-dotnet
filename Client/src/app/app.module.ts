@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { AuthModule } from './auth/auth.module';
 import { TicketsModule } from './tickets/tickets.module';
-import { MyordersModule } from './myorders/myorders.module';
+import { OrdersModule } from './orders/orders.module';
 import { SellTicketModule } from './sell-ticket/sell-ticket.module';
 
 import { ApiService } from '@services/api.service';
@@ -32,7 +32,7 @@ import { AuthService } from '@services/auth.service';
     MaterialModule,
     AuthModule,
     TicketsModule,
-    MyordersModule,
+    OrdersModule,
     SellTicketModule,
   ],
   providers: [ApiService,AuthService],

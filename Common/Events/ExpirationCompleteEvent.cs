@@ -9,7 +9,7 @@ namespace Ticket.Common.Events
     {
         public override Subjects Subject => Subjects.ExpirationComplete;
 
-        public override ExpirationCompleteData Data => new ExpirationCompleteData();
+        public override ExpirationCompleteData Data { get; set; } = new ExpirationCompleteData();
     }
 
     public class ExpirationCompleteData

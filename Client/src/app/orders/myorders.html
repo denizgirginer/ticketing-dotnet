@@ -1,17 +1,21 @@
 <div class="page-content">
 <h3>MyOrders</h3>
 
-<table>
+<table class="custom-table">
     <thead>
-        <th>Title</th>
+        <th style="min-width: 200px;">Title</th>
         <th>Price</th>
         <th>Status</th>
+        <th>Action</th>
     </thead>
     <tbody>
         <tr *ngFor="let order of orders">
             <td>{{order.ticket?.title}}</td>
             <td>{{order.ticket?.price}}</td>
             <td>{{order.status}}</td>
+            <td>
+                <button mat-button color="warn">Delete</button>
+            </td>
         </tr>
     </tbody>
 </table>

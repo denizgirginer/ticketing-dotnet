@@ -46,6 +46,10 @@ namespace Ticket.Common.EventBus
         private void EventHandler(object sender, StanMsgHandlerArgs args) 
         {
             var json = System.Text.Encoding.UTF8.GetString(args.Message.Data);
+
+            Console.WriteLine("Handling:"+args.Message.Subject);
+            Console.WriteLine(json);
+
             var data = JsonSerializer.Deserialize<TData>(json);
 
             this.OnMessage(data, args.Message);

@@ -91,8 +91,10 @@ namespace TicketsApi.Controllers
 
             _ticket.title = ticket.title;
             _ticket.price = ticket.price;
-            _ticket.version = _ticket.version + 1;
-            
+            _ticket.version = _ticket.version+1;
+
+            Console.WriteLine("Update Ticket Version:" + _ticket.version);
+
             await _repo.UpdateAsync(_ticket.id, _ticket);
 
             Console.WriteLine("Update Ticket Version:" + _ticket.version);
@@ -104,6 +106,7 @@ namespace TicketsApi.Controllers
             evt.Data.price = _ticket.price;
             evt.Data.userId = _ticket.userId;
             evt.Data.version = _ticket.version;
+            Console.WriteLine("Event Version:"+ _ticket.version);
             await evt.Publish();
 
             return Ok(_ticket as Models.TicketBase);

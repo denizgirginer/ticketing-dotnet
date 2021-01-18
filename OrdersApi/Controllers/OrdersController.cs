@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Ticket.Common.EventBus;
 using Ticket.Common.Events;
 using Ticket.Common.Helpers;
+using Ticket.Common.Middleware;
 
 namespace OrdersApi.Controllers
 {
@@ -42,12 +43,12 @@ namespace OrdersApi.Controllers
 
             if (order == null)
             {
-                throw new Exception("Not Found");
+                throw new CustomException(System.Net.HttpStatusCode.NotFound);
             }
 
             if (order.userId != SessionHelper.GetUserId())
             {
-                throw new Exception("Not Authoriez");
+                throw new CustomException(System.Net.HttpStatusCode.Unauthorized);
             }
 
             order.ticket = await _ticketRepo.GetByIdAsync(order.ticketId);
@@ -63,12 +64,12 @@ namespace OrdersApi.Controllers
 
             if (order == null)
             {
-                throw new Exception("Not Found");
+                throw new CustomException(System.Net.HttpStatusCode.NotFound);
             }
 
             if (order.userId != SessionHelper.GetUserId())
             {
-                throw new Exception("Not Authoried");
+                throw new CustomException(System.Net.HttpStatusCode.Unauthorized);
             }
 
             await _orderRepo.DeleteAsync(order);
@@ -90,12 +91,12 @@ namespace OrdersApi.Controllers
 
             if (found == null)
             {
-                throw new Exception("Not Found Ticket");
+                throw new CustomException(System.Net.HttpStatusCode.NotFound);
             }
 
             if (await _orderRepo.IsReserved(ticket.ticketId))
             {
-                throw new Exception("Ticket already reserved");
+                throw new CustomException(System.Net.HttpStatusCode.BadRequest);
             }
 
             var expirationDate = DateTime.Now.AddMinutes(30);

@@ -38,10 +38,13 @@ namespace Ticket.Common.EventBus
             // Event-type is embedded in the message:
             //   <event-type>#<value>|<value>|<value>
             string body = $"{eventData}";
-            byte[] message = Encoding.UTF8.GetBytes(body);
 
+            byte[] message = Encoding.UTF8.GetBytes(body);
             string subject = _event.Subject.ToString();
-            
+
+            Console.WriteLine("Sending " + body);
+            Console.WriteLine(body);
+
             return await _client.PublishAsync(subject,  message);
         }
 

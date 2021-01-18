@@ -9,7 +9,7 @@ namespace Ticket.Common.Events
     {
         public override Subjects Subject => Subjects.PaymentCreated;
 
-        public override PaymentCreatedData Data => new PaymentCreatedData();
+        public override PaymentCreatedData Data { get; set; } = new PaymentCreatedData();
     }
 
     public class PaymentCreatedData

@@ -19,3 +19,18 @@ app-root {
     margin-right: auto;
     padding:20px;
 }
+
+table.custom-table {
+    padding: 10px;
+}
+
+table.custom-table th {
+    padding:20px;
+    background-color:#ddd;
+}
+
+
+table.custom-table td {
+    padding:20px;
+    background-color:#fff;
+}
