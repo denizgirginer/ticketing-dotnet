@@ -99,7 +99,7 @@ namespace OrdersApi.Controllers
                 throw new CustomException(System.Net.HttpStatusCode.BadRequest);
             }
 
-            var expirationDate = DateTime.Now.AddMinutes(30);
+            var expirationDate = DateTime.Now.AddMinutes(2); 
 
             var newOrder = new Models.Order()
             {

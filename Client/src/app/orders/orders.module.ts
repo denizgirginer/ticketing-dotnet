@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { MaterialModule } from '../material.module';
 
 import { MyordersComponent } from './myorders';
+import { ShowOrder } from './show-order';
 
 const routes: Routes = [
     {
@@ -14,12 +15,17 @@ const routes: Routes = [
     {
         component: MyordersComponent,
         path: 'myorders'
+    },
+    {
+        component: ShowOrder,
+        path: 'orders/:id'
     }
 ];
 
 @NgModule({
     declarations:[
-        MyordersComponent
+        MyordersComponent,
+        ShowOrder
     ],
     imports: [
         BrowserModule,

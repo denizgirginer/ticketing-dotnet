@@ -1,0 +1,13 @@
+<mat-card style="min-width: 250px;">
+    <mat-card-title>Ticket </mat-card-title>
+    <mat-card-content>
+        <ng-container *ngIf="timeLeft>0">
+            <div>Time left to pay: {{timeLeft}} seconds. <br></div>
+            <button mat-raised-button color="primary">Pay</button>
+        </ng-container>
+
+        <ng-container *ngIf="timeLeft<=0">
+            <div>Order Expired</div>
+        </ng-container>
+    </mat-card-content>
+</mat-card>

@@ -27,12 +27,4 @@ namespace Ticket.Common.Events
         public string id { get; set; }
         public decimal price { get; set; }
     }
-
-    public enum OrderStatus
-    {
-        Created,
-        Cancelled,
-        AwaitingPayment,
-        Complete
-    }
 }

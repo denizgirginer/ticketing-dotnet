@@ -30,8 +30,9 @@ namespace ExpirationSvc.Events
         public override async void OnMessage(OrderCreatedData _data, StanMsg msg)
         {
             Console.WriteLine("Order Created Received:" + _data.id);
+
             string orderId = _data.id;
-            await _orderExpirationQue.AddScheduledTask(() => DoExpire(orderId), DateTime.Now.AddSeconds(30));
+            await _orderExpirationQue.AddScheduledTask(() => DoExpire(orderId), DateTime.Now.AddMinutes(2));
 
             msg.Ack();
         }
