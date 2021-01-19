@@ -1,19 +1,23 @@
-using JwtGenerator.ServiceCollection.Extensions.JwtBearer;
-using JwtGenerator.Types;
+using ExpirationSvc.Events;
+using ExpirationSvc.JobQue;
+using Gofer.NET;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Ticket.Common.EventBus;
 using Ticket.Common.Helpers;
-using Ticket.Common.MongoDb.V1;
-using TicketsApi.Events;
-using TicketsApi.Repo;
 
-namespace TicketsApi
+namespace ExpirationSvc
 {
     public class Startup
     {
@@ -32,25 +36,27 @@ namespace TicketsApi
             services.AddNats();
 
             services.AddSingleton<IOrderCreatedListener, OrderCreatedListener>();
-            services.AddSingleton<IOrderCancelledListener, OrderCancelledListener>();
+            services.AddSingleton<IOrderExpirationQue, OrderExpirationQue>();
 
+            /*
+            var REDIS_HOST = Environment.GetEnvironmentVariable("REDIS_HOST");
+            var que = TaskQueue.Redis(REDIS_HOST, "ExpirationService");
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequiresAdmin", policy => policy.RequireClaim("HasAdminRights"));
+            var taskClient = new TaskClient(que);
+            taskClient.TaskQueue.Enqueue(() => Console.WriteLine("Deneme task 2"));
+             
+            taskClient.TaskScheduler.AddScheduledTask(() => Console.WriteLine("Scheduled task 2"), DateTime.Now.AddSeconds(30));
 
-            });
+            taskClient.Listen();*/
 
             services.AddControllers();
-
-            services.AddMongoDbSettings(Configuration);
-            services.AddSingleton<ITicketRepo, TicketRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor,
-            IOrderCancelledListener orderCancelledListener,
-            IOrderCreatedListener orderCreatedListener)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IHttpContextAccessor httpContextAccessor,
+            IOrderCreatedListener orderCreatedListener,
+            IOrderExpirationQue orderExpirationQue)
         {
             if (env.IsDevelopment())
             {
@@ -58,8 +64,15 @@ namespace TicketsApi
             }
 
             orderCreatedListener.Subscribe();
-            orderCancelledListener.Subscribe();
+            orderExpirationQue.Listen();
 
+
+            //orderExpirationQue.AddScheduledTask(() => Console.WriteLine("Scheduled Task Queeee"), DateTime.Now.AddSeconds(30));
+            /*
+            orderExpirationQue.AddScheduledTask(new OrderJob()
+            {
+                orderId = "DENEMEORDER01"
+            }, DateTime.Now.AddSeconds(10)); */
 
             app.UseHttpContext(httpContextAccessor);
 
@@ -67,7 +80,6 @@ namespace TicketsApi
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

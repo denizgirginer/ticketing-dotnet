@@ -10,5 +10,6 @@ namespace OrdersApi.Repo
     {
         Task<bool> IsReserved(string ticketId);
         Task<List<Models.Order>> GetUserOrders(string userId);
+        Task<Models.Order> GetOrderById(string orderId);
     }
 }

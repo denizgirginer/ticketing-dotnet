@@ -27,3 +27,12 @@ spec:
               value: 'ticketing'
             - name: REDIS_HOST
               value: expiration-redis-service
+            - name: JWT_AUDIENCE
+              value: 'Token.WebAPI.Clients'
+            - name: JWT_ISSUER
+              value: 'Token.WebAPI'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY

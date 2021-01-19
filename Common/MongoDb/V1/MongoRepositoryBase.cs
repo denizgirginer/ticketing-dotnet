@@ -58,11 +58,13 @@ namespace Ticket.Common.MongoDb.V1
 
         public virtual async Task<T> UpdateAsync(string id, T entity)
         {
+            entity.version = entity.version + 1;
             return await Collection.FindOneAndReplaceAsync(x => x.id == id, entity);
         }
 
         public virtual async Task<T> UpdateAsync(T entity, Expression<Func<T, bool>> predicate)
         {
+            entity.version = entity.version + 1;
             return await Collection.FindOneAndReplaceAsync(predicate, entity);
         }
 

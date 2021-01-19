@@ -11,7 +11,7 @@ namespace OrdersApi.Events
 {
     public class TicketCreatedListener : ListenerBase<TicketCreatedEvent, TicketCreatedData>, ITicketCreatedListener
     {
-        public override string QueGroupName => "OrdersService";
+        public override string QueGroupName => QueGroups.OrdersService;
 
         public override Subjects Subject => Subjects.TicketCreated;
 

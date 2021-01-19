@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.EventBus;
+using Ticket.Common.Events;
 using Ticket.Common.Helpers;
 
 namespace PaymentsApi.Controllers
@@ -24,20 +26,20 @@ namespace PaymentsApi.Controllers
         [Route("/")]
         public async Task<IActionResult> NewPaymnet(PaymentModel payment)
         {
-            var found = await _orderRepo.GetByIdAsync(payment.orderId);
+            var order = await _orderRepo.GetByIdAsync(payment.orderId);
 
-            if(found==null)
+            if(order==null)
             {
                 throw new Exception("Not Found");
             }
 
-            if(found.userId!=SessionHelper.GetUserId())
+            if(order.userId!=SessionHelper.GetUserId())
             {
                 throw new Exception("Not Authorized");
             }
 
-            string stripeId = "";
-            //TODO stribe charge
+            string stripeId = Guid.NewGuid().ToString();
+            //TODO stripe charge
             /*
              const charge = await stripe.charges.create({
                 currency: 'usd',
@@ -48,11 +50,15 @@ namespace PaymentsApi.Controllers
 
             var newPayment = new Models.Payment() { 
                 stripeId=stripeId,
-                orderId=found.id
+                orderId=order.id
             };
             await _paymentRepo.AddAsync(newPayment);
 
-            //TODO publish event PaymentCreated
+            //publish PaymentCreated
+            var evt = new PaymentCreatedEvent();
+            evt.Data.orderId = order.id;
+            evt.Data.stripeId = stripeId;
+            await evt.Publish();
 
             return Ok(new {
                 id= newPayment.id

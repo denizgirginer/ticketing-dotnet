@@ -91,7 +91,6 @@ namespace TicketsApi.Controllers
 
             _ticket.title = ticket.title;
             _ticket.price = ticket.price;
-            _ticket.version = _ticket.version+1;
 
             Console.WriteLine("Update Ticket Version:" + _ticket.version);
 

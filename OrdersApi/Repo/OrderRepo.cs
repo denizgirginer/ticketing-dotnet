@@ -29,6 +29,14 @@ namespace OrdersApi.Repo
             return found!=null;
         }
 
+        public async Task<Models.Order> GetOrderById(string orderId)
+        {
+            var order = await GetByIdAsync(orderId);
+            order.ticket = await _ticketRepo.GetByIdAsync(order.ticketId);
+
+            return await Task.FromResult(order);
+        }
+
         public async Task<List<Models.Order>> GetUserOrders(string userId)
         {
             List<Models.Order> orders = null;

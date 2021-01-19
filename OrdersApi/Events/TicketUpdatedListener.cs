@@ -11,7 +11,7 @@ namespace OrdersApi.Events
 {
     public class TicketUpdatedListener : ListenerBase<TicketUpdatedEvent, TicketUpdatedData>, ITicketUpdatedListener
     {
-        public override string QueGroupName => "OrdersService";
+        public override string QueGroupName => QueGroups.OrdersService;
 
         public override Subjects Subject => Subjects.TicketUpdated;
 
@@ -36,7 +36,6 @@ namespace OrdersApi.Events
 
             found.title = _data.title;
             found.price = _data.price;
-            found.version = _data.version;
 
             await _ticketRepo.UpdateAsync(found.id, found);
 

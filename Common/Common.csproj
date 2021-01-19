@@ -8,7 +8,7 @@
     <Authors>Deniz Girginer</Authors>
     <Company>Deniz Girginer</Company>
     <PackageId>DenizGirginer.Ticketing.Common</PackageId>
-    <Version>1.0.27</Version>
+    <Version>1.0.28</Version>
   </PropertyGroup>
 
   <ItemGroup>

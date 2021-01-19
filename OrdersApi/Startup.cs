@@ -30,6 +30,8 @@ namespace OrdersApi
 
             services.AddSingleton<ITicketCreatedListener, TicketCreatedListener>();
             services.AddSingleton<ITicketUpdatedListener, TicketUpdatedListener>();
+            services.AddSingleton<IExpirationCompleteListener, ExpirationCompleteListener>();
+            services.AddSingleton<IPaymentCreatedListener, PaymentCreatedListener>();
 
             services.AddAuthorization(options =>
             {
@@ -46,7 +48,9 @@ namespace OrdersApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, 
             ITicketCreatedListener ticketCreatedListener,
-            ITicketUpdatedListener ticketUpdatedListener)
+            ITicketUpdatedListener ticketUpdatedListener,
+            IExpirationCompleteListener expirationCompleteListener,
+            IPaymentCreatedListener paymentCreatedListener)
         {
             if (env.IsDevelopment())
             {
@@ -57,6 +61,8 @@ namespace OrdersApi
 
             ticketCreatedListener.Subscribe();
             ticketUpdatedListener.Subscribe();
+            expirationCompleteListener.Subscribe();
+            paymentCreatedListener.Subscribe();
 
             app.UseHttpContext(httpContextAccessor);
 

@@ -9,11 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PaymentsApi.Events;
 using PaymentsApi.Repo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ticket.Common.EventBus;
 using Ticket.Common.Helpers;
 using Ticket.Common.MongoDb.V1;
 
@@ -33,6 +35,10 @@ namespace PaymentsApi
         {
             services.AddJwtForAPI();
             services.AddHttpContextAccessor();
+            services.AddNats();
+
+            services.AddSingleton<IOrderCreatedListener, OrderCreatedListener>();
+            services.AddSingleton<IOrderCancelledListener, OrderCancelledListener>();
 
             services.AddAuthorization(options =>
             {
@@ -40,20 +46,25 @@ namespace PaymentsApi
             });
 
             services.AddMongoDbSettings(Configuration);
-            services.AddScoped<IOrderRepo, OrderRepo>();
-            services.AddScoped<IPaymentRepo, PaymentRepo>();
+            services.AddSingleton<IOrderRepo, OrderRepo>();
+            services.AddSingleton<IPaymentRepo, PaymentRepo>();
 
 
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor,
+            IOrderCancelledListener orderCancelledListener,
+            IOrderCreatedListener orderCreatedListener)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            orderCreatedListener.Subscribe();
+            orderCancelledListener.Subscribe();
 
             app.UseHttpContext(httpContextAccessor);
 
